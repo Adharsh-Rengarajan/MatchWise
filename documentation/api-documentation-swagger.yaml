@@ -8,11 +8,149 @@ servers:
   - url: http://localhost:9000
     description: Local development environment
 
+
+
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        userName: 
+          type: string
+        password: 
+          type: string
+        role: 
+          type: string
+          
+    Job:
+        type: object
+        properties:
+          jobId:
+            type: string
+          jobTitle:
+            type: string
+          jobDescription:
+            type: string
+          jobPostedDate:
+            type: string
+          jobCompensation:
+            type: string
+          company:
+            type: string
+          locations:
+            type: array
+            items:
+              type: string
+    
+       
+    Jobs:
+      type: array
+      items:
+        $ref: "#/components/schemas/Job"
+
+    MockTest:
+      type: array
+      items:
+        type: string
+    
+    Messages:
+      type: array
+      items:
+        type: string
+    
+    Candidate:
+      type: object
+      properties:
+        candidateFirstName:
+          type: string
+        candidateMiddleName:
+          type: string
+        candidateLastName:
+          type: string
+        candidateExperience:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              designation:
+                type: string
+              years:
+                type: integer
+              months:
+                type: integer
+              days:
+                type: integer
+        candidateResumeLocation:
+          type: string
+        candidatePreferences:
+          type: string
+        candidateJobDomain:
+          type: string
+        candidateProfilePicturelocation:
+          type: string
+        candidateHeadline:
+          type: string
+        candidateMessages:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        candidateEducatianHistory:
+          type: array
+          items:
+            type: object
+        candidateSWOT:
+          type: object
+          properties:
+            strenghts: 
+              type: string
+            weakness:
+              type: string
+            opportunities:
+              type: string
+            threats:
+              type: string
+        candidateJobLists:
+          $ref: "#/components/schemas/Job"
+        candidateSavedJobs:
+          $ref: "#/components/schemas/Job"
+        candidateId:
+          type: string
+    
+    Recruiter:
+      type: object
+      properties:
+        recruiterFirstName:
+          type: string
+        recruiterMiddleName:
+          type: string 
+        recruiterLastName:
+          type: string
+        recruiterJobDetails:
+          $ref: "#/components/schemas/Job"
+        recruiterCompany:
+          type: string
+        recruiterId:
+          type: string
+        
+    
+    
+    
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
 paths:
   /login:
     post:
-      operationId: user-login
-      description: API for login
+      description: Allows user to login
       responses:
         200:
           description: Succesfully posted the details
@@ -22,6 +160,32 @@ paths:
                 type: array
                 items:
                   $ref: "/#/components/schemas/Login"
+        400:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+        500:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+        
+        
+  /alljobs:
+    get:
+      description: Fetches a list of available jobs
+      responses:
+        200:
+          description: A list of jobs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Jobs'
         401:
           description: Authentication Error
           content:
@@ -36,29 +200,187 @@ paths:
               schema:
                 type: object
                 $ref: "/#/components/schemas/Error"
+  
+  /mocktest/:jobId:
+    post:
+      description: Enables the candidate to take up a mock test
+      responses:
+        200:
+          description: Succesfully posted the details
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "/#/components/schemas/MockTest"
+        400:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+        500:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
     
-
-      
-
-
-components:
-  schemas:
-    Login:
-      type: object
-      properties:
-        userName: 
-          type: string
-        password: 
-          type: string
-        role: 
-          type: string
-       
-
- 
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
+  /updatejobpreference:
+    put:
+      description: Enables the user to update the job description
+      responses:
+        200:
+          description: Succesfully updated the details
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "/#/components/schemas/MockTest"
+        400:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+        500:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+  
+  /candidateregistration:
+    post:
+      description: Enables the candidate to register to the application
+      responses:
+        200:
+          description: Succesfully posted the details
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "/#/components/schemas/Candidate"
+        400:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+        500:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+    
+  /recruiterregistration:
+      post:
+        description: Enables the recruiter to register to the application
+        responses:
+          200:
+            description: Succesfully posted the details
+            content:
+              "application/json":
+                schema:
+                  type: array
+                  items:
+                    $ref: "/#/components/schemas/Recruiter"
+          400:
+            description: Authentication Error
+            content:
+              "application/json":
+                schema:
+                  type: object
+                  $ref: "/#/components/schemas/Error"
+          500:
+            description: Authentication Error
+            content:
+              "application/json":
+                schema:
+                  type: object
+                  $ref: "/#/components/schemas/Error"
+                  
+  /postjob:
+      post:
+        description: Enables the recruiter to post a job to the application
+        responses:
+          200:
+            description: Succesfully posted the details
+            content:
+              "application/json":
+                schema:
+                  type: array
+                  items:
+                    $ref: "/#/components/schemas/Job"
+          400:
+            description: Authentication Error
+            content:
+              "application/json":
+                schema:
+                  type: object
+                  $ref: "/#/components/schemas/Error"
+          500:
+            description: Authentication Error
+            content:
+              "application/json":
+                schema:
+                  type: object
+                  $ref: "/#/components/schemas/Error"
+                  
+  /findjobs:
+    get:
+      description: Fetches a list of available jobs and matches using AI
+      responses:
+        200:
+          description: A list of jobs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Jobs'
+        401:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+        500:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+  /swottest:
+    get:
+      description: Performs the SWOT Analyisis for a candidate
+      responses:
+        200:
+          description: SWOT object
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
+        500:
+          description: Authentication Error
+          content:
+            "application/json":
+              schema:
+                type: object
+                $ref: "/#/components/schemas/Error"
